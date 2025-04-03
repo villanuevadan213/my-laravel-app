@@ -80,7 +80,8 @@ class AuditController extends Controller
             // If no matching tracking number is found, create a new tracking number
             // Generate 22 random digits as a string
             $randomDigits = '';
-            for ($i = 0; $i < 22; $i++) {
+            $trackingdiff = 34 - strlen($tracking);
+            for ($i = 0; $i < $trackingdiff; $i++) {
                 $randomDigits .= rand(0, 9);  // Append a random number (0-9) to the string
             }
             

@@ -2,9 +2,6 @@
     <div x-data="{ open: false }">
         <!-- Button to trigger modal -->
         <x-form-button class="bg-green-600 hover:bg-green-500" @click="open = true">Enter Data</x-form-button>
-        <button @click="open = true" class="px-6 py-2  text-white rounded-lg ">
-
-        </button>
 
         <!-- Modal -->
         <div x-show="open" x-transition:enter="transition ease-out duration-300 transform"
