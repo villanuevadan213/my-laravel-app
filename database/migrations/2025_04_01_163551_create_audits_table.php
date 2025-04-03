@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Audit;
+use App\Models\Item;
 use App\Models\Tracking;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,6 +17,7 @@ return new class extends Migration
         Schema::create('audits', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Tracking::class);
+            $table->foreignIdFor(Item::class);
             $table->string('title');
             $table->string('product_control_no');
             $table->string('basket_no');

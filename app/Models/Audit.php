@@ -16,6 +16,10 @@ class Audit extends Model
         return $this->belongsTo(Tracking::class);
     }
 
+    public function item(){
+        return $this->belongsTo(Item::class);
+    }
+
     public function logs() {
         return $this->belongsToMany(Log::class, foreignPivotKey: "audit_id");
     }

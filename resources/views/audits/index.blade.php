@@ -27,6 +27,9 @@
                                 Title
                             </th>
                             <th scope="col" class="px-2 py-1">
+                                Name
+                            </th>
+                            <th scope="col" class="px-2 py-1">
                                 Product Control #
                             </th>
                             <th scope="col" class="px-2 py-1">
@@ -51,6 +54,7 @@
                             <tr
                                 class="{{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} text-center border-b-2 border-gray-200">
                                 <td class="px-2 py-1 text-gray-500">{{ $audit->title }}</td>
+                                <td class="px-2 py-1 text-gray-500">{{ $audit->item->name }}</td>
                                 <td class="px-2 py-1 text-gray-500">{{ $audit->product_control_no }}</td>
                                 <td class="px-2 py-1 text-gray-500">{{ $audit->basket_no }}</td>
                                 <td class="px-2 py-1 text-gray-500">{{ $audit->serial_no }}</td>

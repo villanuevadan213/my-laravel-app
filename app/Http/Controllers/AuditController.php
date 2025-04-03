@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Audit;
+use App\Models\Item;
+use App\Models\Supplier;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
 
 class AuditController extends Controller
 {
     public function index() {
-        $audits = Audit::with('tracking')->latest()->simplePaginate(10);
+        $audits = Audit::with(['tracking', 'item'])->orderBy('id','desc')->simplePaginate(10);
 
         return view('audits.index', [
             'audits' => $audits
@@ -56,7 +58,47 @@ class AuditController extends Controller
             $audit = Audit::where('tracking_id', $trackingRecord->id)->first();
     
             if ($audit) {
-                // If audit exists, update it
+                // Check if the audit already has an associated item
+                if ($audit->item_id) {
+                    $item = Item::find($audit->item_id);
+                    
+                    // If the item exists but has no name, generate it based on the supplier name
+                    if (!$item->name) {
+                        $supplier = Supplier::find($item->supplier_id);
+    
+                        // Generate item name based on supplier
+                        if (!$supplier->name) {
+                            // If supplier name is missing, generate it (example: Supplier-<id>)
+                            $supplier->name = 'Supplier ' . $supplier->id;
+                            $supplier->save();  // Save the updated supplier
+                        }
+    
+                        // Now generate item name based on the supplier
+                        $item->name = 'Item '.rand(1, 999);
+                        $item->save();
+                    }
+                } else {
+                    // If no item is associated with this audit, create a new Item
+    
+                    // Assume you have a supplier name or identifier to associate
+                    $supplierName = 'Supplier '.rand(0, 999); // Adjust as necessary
+    
+                    // Find or create the supplier
+                    $supplier = Supplier::firstOrCreate(['name' => $supplierName]);
+    
+                    // Create a new Item and associate the Supplier
+                    $item = Item::create([
+                        'name' => 'Item '.rand(1, 999),
+                        'price' => '₱ '.rand(1,5000),
+                        'supplier_id' => $supplier->id,  // Associate the Supplier
+                    ]);
+    
+                    // Update the audit with the new item_id
+                    $audit->item_id = $item->id;
+                    $audit->save();
+                }
+    
+                // Update the audit record with the rest of the fields
                 $audit->status = 'Updated';
                 $audit->serial_no = $serial;
                 $audit->basket_no = $basket;
@@ -67,6 +109,25 @@ class AuditController extends Controller
                 return redirect('/audits')->with('success', 'Audit updated successfully!');
             } else {
                 // If audit doesn't exist, create a new audit record
+    
+                // Find or create the supplier
+                $supplierName = 'Supplier '.rand(0, 999); // Adjust as necessary
+                $supplier = Supplier::firstOrCreate(['name' => $supplierName]);
+    
+                // Check if the supplier's name is missing, and generate it if necessary
+                if (!$supplier->name) {
+                    $supplier->name = 'Supplier ' . $supplier->id; // Example name generation
+                    $supplier->save();
+                }
+    
+                // Create a new Item and associate the Supplier
+                $item = Item::create([
+                    'name' => 'Item '.rand(1, 999),
+                    'price' => '₱ '.rand(1,5000),
+                    'supplier_id' => $supplier->id,  // Associate the Supplier
+                ]);
+    
+                // Create a new audit record with the new tracking ID and Item
                 $audit = new Audit();
                 $audit->title = $title;
                 $audit->product_control_no = $productControl;
@@ -74,9 +135,10 @@ class AuditController extends Controller
                 $audit->serial_no = $serial;
                 $audit->status = 'Created';
                 $audit->tracking_id = $trackingRecord->id;
+                $audit->item_id = $item->id; // Associate the new Item
                 $audit->save();
     
-                return redirect('/audits')->with('success', 'Audit created successfully!');
+                return redirect('/audits')->with('success', 'Audit created successfully with new Item and existing tracking number!');
             }
         } else {
             // If no matching tracking number is found, create a new tracking number
@@ -86,7 +148,7 @@ class AuditController extends Controller
             for ($i = 0; $i < $trackingdiff; $i++) {
                 $randomDigits .= rand(0, 9);  // Append a random number (0-9) to the string
             }
-            
+    
             // Combine the random digits with the provided 12-digit string
             $newTrackingNo = $randomDigits . $tracking;
     
@@ -95,7 +157,24 @@ class AuditController extends Controller
             $trackingRecord->tracking_no = $newTrackingNo;
             $trackingRecord->save();
     
-            // Create new audit record with the new tracking ID
+            // Create new Supplier if needed
+            $supplierName = 'Supplier '.rand(0, 999); // Adjust as necessary
+            $supplier = Supplier::firstOrCreate(['name' => $supplierName]);
+    
+            // Check if the supplier's name is missing, and generate it if necessary
+            if (!$supplier->name) {
+                $supplier->name = 'Supplier ' . $supplier->id; // Example name generation
+                $supplier->save();
+            }
+    
+            // Create new Item with the new Supplier
+            $item = Item::create([
+                'name' => 'Item '.rand(1, 999),
+                'price' => '₱ '.rand(1,5000),
+                'supplier_id' => $supplier->id,  // Associate with Supplier
+            ]);
+    
+            // Create new audit record with the new tracking ID and Item
             $audit = new Audit();
             $audit->title = $title;
             $audit->product_control_no = $productControl;
@@ -103,12 +182,13 @@ class AuditController extends Controller
             $audit->serial_no = $serial;
             $audit->status = 'Created';
             $audit->tracking_id = $trackingRecord->id;
+            $audit->item_id = $item->id; // Associate the new Item
             $audit->save();
     
-            return redirect('/audits')->with('success', 'Audit created successfully with new tracking number!');
+            return redirect('/audits')->with('success', 'Audit created successfully with new tracking number, Item, and Supplier!');
         }
     }
-
+    
     public function edit(Audit $audit) {
         return view('audits.edit', ['audit' => $audit]);
     }
