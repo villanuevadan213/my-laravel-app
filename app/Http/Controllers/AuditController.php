@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class AuditController extends Controller
 {
     public function index() {
-        $audits = Audit::with('tracking')->orderBy('id','desc')->simplePaginate(10);
+        $audits = Audit::with('tracking')->latest()->simplePaginate(10);
 
         return view('audits.index', [
             'audits' => $audits
@@ -57,6 +57,7 @@ class AuditController extends Controller
     
             if ($audit) {
                 // If audit exists, update it
+                $audit->status = 'Updated';
                 $audit->serial_no = $serial;
                 $audit->basket_no = $basket;
                 $audit->product_control_no = $productControl;
@@ -71,6 +72,7 @@ class AuditController extends Controller
                 $audit->product_control_no = $productControl;
                 $audit->basket_no = $basket;
                 $audit->serial_no = $serial;
+                $audit->status = 'Created';
                 $audit->tracking_id = $trackingRecord->id;
                 $audit->save();
     
@@ -99,6 +101,7 @@ class AuditController extends Controller
             $audit->product_control_no = $productControl;
             $audit->basket_no = $basket;
             $audit->serial_no = $serial;
+            $audit->status = 'Created';
             $audit->tracking_id = $trackingRecord->id;
             $audit->save();
     

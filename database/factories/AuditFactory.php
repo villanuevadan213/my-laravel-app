@@ -24,6 +24,7 @@ class AuditFactory extends Factory
             'product_control_no' => 'PCN'.rand(1,999),
             'basket_no' => 'BKT'.rand(1,999),
             'serial_no' => strtoupper(Str::random(5)) . rand(100000, 999999) . strtoupper(Str::random(5)),
+            'status' => 'Created',
         ];
     }
 }

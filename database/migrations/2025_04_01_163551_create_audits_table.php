@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('product_control_no');
             $table->string('basket_no');
             $table->string('serial_no');
+            $table->string('status');
             $table->timestamps();
         });
     }
