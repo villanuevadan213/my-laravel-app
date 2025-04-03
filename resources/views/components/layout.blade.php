@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Website</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </head>
 <body class="h-full">
     <div class="min-h-full">
@@ -13,7 +16,7 @@
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
                         <div class="shrink-0">
-                            <img class="size-8" src="{{ asset('/images/logo/logo_small.png') }}" alt="Your Company">
+                            <img class="size-8" src="{{ asset('images/logo/logo_small.png') }}" alt="Your Company">
                         </div>
                         <div class="hidden md:block">
                             <div class="ml-10 flex items-baseline space-x-4">
@@ -120,5 +123,7 @@
             </div>
         </main>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </body>
 </html>

@@ -60,7 +60,7 @@
 
         <div class="mt-6 flex items-center justify-end gap-x-6">
             <a href="/" class="text-sm/6 font-semibold text-gray-900">Cancel</a>
-            <x-form-button>Register</x-form-button>
+            <x-form-button class="bg-indigo-600 hover:bg-indigo-500">Register</x-form-button>
         </div>
     </form>
 </x-layout>
