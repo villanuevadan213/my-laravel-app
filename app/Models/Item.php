@@ -23,4 +23,8 @@ class Item extends Model {
     public function tags() {
         return $this->belongsToMany(Tag::class, foreignPivotKey: "inventory_item_id");
     }
+
+    public function sale(){
+        return $this->hasMany(Sale::class);
+    }
 }
