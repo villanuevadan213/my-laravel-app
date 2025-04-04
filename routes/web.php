@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\POSController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
@@ -10,7 +11,6 @@ use App\Models\Item;
 Route::view('/', 'home');
 Route::view('/dashboard', 'dashboard');
 Route::view('/sales', 'sales');
-Route::view('/pos', 'pos');
 
 Route::resource('audits', AuditController::class);
 
@@ -25,6 +25,8 @@ Route::get('/items/{item}/edit', [ItemController::class, 'edit'])
 
 Route::patch('/items/{item}', [ItemController::class, 'update']);
 Route::delete('/items/{item}', [ItemController::class, 'destroy']);
+
+Route::get('/pos', [POSController::class, 'index']);
 
 //Auth
 Route::get('/register', [RegisterUserController::class, 'create']);

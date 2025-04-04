@@ -80,7 +80,21 @@
         </div>
 
         <div class="w-full bg-white shadow rounded-lg p-4 flex flex-col space-y-4">
-            Item List
+            @foreach ($items as $item)
+                <div role="button" class="p-4 bg-white shadow rounded-lg flex flex-col space-y-4 h-full"
+                    onclick="addToCart({{ $item->id }}, '{{ $item->name }}', {{ $item->price }}, {{ $item->quantity }})">
+                    <h3 class="text-lg font-bold text-gray-800">{{ $item->name }}</h3>
+                    <p class="text-sm text-gray-500">₱ {{ number_format($item->price, 2) }}</p>
+                    <p class="text-sm text-gray-500">{{ $item->quantity }}</p>
+                    <!-- Spacer to push content above -->
+                    <div class="flex-grow"></div>
+                    <!-- Quantity input and Add button at the bottom -->
+                    <div class="w-full hidden">
+                        <input type="number" id="quantity-{{ $item->id }}" min="1" max="{{ $item->quantity }}"
+                            class="border rounded px-2 py-1 w-full text-center mb-2" placeholder="Quantity" value="1">
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 </x-layout>

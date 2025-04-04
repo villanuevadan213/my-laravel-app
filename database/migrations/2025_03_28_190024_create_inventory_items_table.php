@@ -17,7 +17,8 @@ return new class extends Migration
             // $table->unsignedBigInteger('supplier_id');
             $table->foreignIdFor(Supplier::class);
             $table->string('name');
-            $table->string('price');
+            $table->decimal('price', 8, 2);
+            $table->integer('quantity');
             $table->timestamps();
         });
     }

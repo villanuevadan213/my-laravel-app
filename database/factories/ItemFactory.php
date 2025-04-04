@@ -18,9 +18,10 @@ class ItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'Item '.rand(1, 999),
             'supplier_id' => Supplier::factory(),
-            'price' => '₱ '.rand(1,5000),
+            'name' => 'Item '.rand(1, 999),
+            'price' => $this->faker->randomFloat(2, 10, 5000),
+            'quantity' => $this->faker->numberBetween(1, 100),
         ];
     }
 }
